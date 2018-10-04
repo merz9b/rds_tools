@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="227f418d-0e62-4c8a-bcf7-1ca63057b7e2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rds_tools/db_configs/connection_info.json.bak" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/readme.MD" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/rds_tools/db_configs/.gitignore" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
