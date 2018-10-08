@@ -1,8 +1,14 @@
 {
   "testing":{"sqlite":":memory:"},
-  "production":{"futurexdb":{"ip":"47.100.2.112",
+  "production":{"gxqh":{"ip":"47.100.2.112",
                       "port":33306,
                       "usr":"*",
                       "pwd":"*",
-                      "db":"futurexdb"}}
+                      "db":"futurexdb"},
+                "localuser":{"ip":"47.100.2.112",
+                      "port":33306,
+                      "usr":"*",
+                      "pwd":"*",
+                      "db":"futurexdb"}
+            }
 }

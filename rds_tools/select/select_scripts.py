@@ -5,10 +5,12 @@
 # @File    : select_scripts.py
 
 import warnings
-from ..utils.config_parser import mysql_conf
-from ..utils.read_sqls import read_raw_sql
-from ..models.tables import exchange, underlying, model_params
+from pandas import read_sql, datetime
+from ..models.tables import (exchange, underlying, model_params,
+                             contract_info, model_paramdef, order_record_otc,
+                             client_terminal, portfolio, accountid_map)
 from sqlalchemy.sql import select, and_, distinct
+
 
 warnings.filterwarnings('ignore', category= Warning)
 
@@ -23,16 +25,16 @@ class FuturexDB:
         cls._fxdb_cache = dict()
 
     @classmethod
-    def get_param_data(cls, exchange_name,index,model='wing'):
+    def get_param_data(cls, exchange_name,index,model='wing', account_id = 20):
 
 
         modelinstance = '{exchange}-{index}'.format(exchange=exchange_name, index=index)
 
-        tdf = read_raw_sql(select([model_params]).where(
-            and_(model_params.c.accountid == 20,
+        tdf = read_sql(select([model_params]).where(
+            and_(model_params.c.accountid == account_id,
                  model_params.c.model == model,
                  model_params.c.modelinstance.like('%{ml}%'.format(ml =modelinstance)))
-        ))
+        ), model_params.bind)
         return tdf
 
     @classmethod
@@ -59,14 +61,14 @@ class FuturexDB:
 
 
     @classmethod
-    def get_future_info(cls):
+    def get_future_info(cls, account_id = 20):
 
-        res_tmp = mysql_conf.production_engine().execute(
+        res_tmp = model_params.bind.execute(
             select(
                 [distinct(model_params.c.modelinstance)]
                 )
             .where(
-                model_params.c.accountid == 20
+                model_params.c.accountid == account_id
                 )
             ).fetchall()
 
@@ -80,7 +82,7 @@ class FuturexDB:
 
         if cls._fxdb_cache['exchange_zh'].get(exchange_name) is None:
 
-            res = mysql_conf.production_engine().execute(
+            res = exchange.bind.execute(
                 select([exchange.c.desc_zh]).where(exchange.c.symbol == exchange_name)
             ).scalar()
 
@@ -100,7 +102,7 @@ class FuturexDB:
 
         if cls._fxdb_cache['contract_zh'].get((exchange_name, underlying_name)) is None:
 
-            res = mysql_conf.production_engine().execute(
+            res = underlying.bind.execute(
                 select([underlying.c.desc_zh]).where(
                     and_(
                         underlying.c.exchange_symbol == exchange_name,
@@ -117,13 +119,13 @@ class FuturexDB:
             return cls._fxdb_cache['contract_zh'][(exchange_name, underlying_name)]
 
     @classmethod
-    def get_underlying(cls):
+    def get_underlying(cls, account_id = 20):
 
         # read table to data frame
-        tmp = read_raw_sql(select([distinct(model_params.c.modelinstance)]).where(and_(
-            model_params.c.accountid == 20,
+        tmp = read_sql(select([distinct(model_params.c.modelinstance)]).where(and_(
+            model_params.c.accountid == account_id,
             model_params.c.model == 'wing'
-        )))
+        )), model_params.bind)
 
         # expand columns
         tmp1 = tmp.iloc[:, 0].str.split('-', expand=True).iloc[:, :2]
@@ -153,7 +155,7 @@ class FuturexDB:
 
         if cls._fxdb_cache['ud_multiplier'].get(underlying_symbol) is None:
 
-            s = mysql_conf.production_engine().execute(
+            s = underlying.bind.execute(
                 select([underlying.c.multiplier]).where(underlying.c.underlying_symbol == underlying_symbol)
             ).scalar()
 
@@ -165,6 +167,132 @@ class FuturexDB:
 
         else:
             return cls._fxdb_cache['ud_multiplier'][underlying_symbol]
+
+
+    @classmethod
+    def get_contract(cls, exchange_,contract_, date_ = None):
+        if date_ is None:
+            date_ = datetime.now().date()
+
+        contract_list = contract_info.bind.execute(
+            select([contract_info.c.contract_symbol]).where(and_(
+                contract_info.c.exchange_symbol == exchange_,
+                contract_info.c.underlying_symbol == contract_,
+                contract_info.c.expiration > date_
+            ))
+        ).fetchall()
+
+        return [s[0] for s in contract_list]
+
+    @classmethod
+    def get_paramdef_by_model(cls, model_name):
+
+        tdf = read_sql(select([model_paramdef]).where(model_paramdef.c.model == model_name),
+            model_paramdef.bind
+            )
+
+        return tdf
+
+    @classmethod
+    def get_order_record_otc(cls, account_id):
+
+        tdf = read_sql(select([order_record_otc]).where(
+            order_record_otc.c.accountid == account_id
+        ), order_record_otc.bind)
+
+        return tdf
+
+    @classmethod
+    def get_order_param(cls, account_id, model_instance):
+
+        tdf = read_sql(select([model_params]).where(
+            and_(model_params.c.accountid == account_id,
+                 model_params.c.modelinstance == model_instance)), model_params.bind)
+        param_data = tdf.pivot('modelinstance', 'paramname', 'paramstring')
+
+        return param_data
+
+    @classmethod
+    def get_role_by_name(cls, account_id):
+
+        tdf = read_sql(
+            select([client_terminal]).where(client_terminal.c.accountid == account_id),
+            client_terminal.bind
+        )
+
+        return tdf
+
+    @classmethod
+    def get_role_by_role_type(cls, role_type):
+
+        tdf = read_sql(
+            select([client_terminal]).where(client_terminal.c.roletype == role_type),
+            client_terminal.bind
+        )
+
+        return tdf
+
+    @classmethod
+    def get_portfolio_by_id(cls, account_id):
+
+        tdf = read_sql(
+            select([portfolio]).where(
+                portfolio.c.accountid == account_id
+            ),
+            portfolio.bind
+        )
+
+        return tdf
+
+    @classmethod
+    def get_order_by_risk_id(cls, risk_id):
+
+        tdf = read_sql(select([order_record_otc]).where(
+            order_record_otc.c.riskid == risk_id
+        ), order_record_otc.bind)
+
+        return tdf
+
+    @classmethod
+    def get_account_id_map_by_master_id(cls, master_id):
+
+        tdf = read_sql(
+            select([accountid_map]).where(
+                accountid_map.c.master_id == master_id
+            ),
+            accountid_map.bind
+        )
+
+        return tdf
+
+    @classmethod
+    def get_trader_id_by_master_id(cls, master_id, role_type = 12):
+
+        s_id = cls.get_account_id_map_by_master_id(master_id).slave_id
+        trader_list = cls.get_role_by_role_type(role_type)
+
+        return trader_list[trader_list['accountid'].isin(s_id)]
+
+    @classmethod
+    def get_order_record_by_symbol_traderid(cls, port_symbol, trader_id):
+
+        tdf = read_sql(
+            select([order_record_otc]).where(
+                and_(
+                    order_record_otc.c.portfolio_symbol == port_symbol,
+                    order_record_otc.c.traderid == trader_id,
+                    order_record_otc.c.status == 1
+                )
+            ),
+            order_record_otc.bind
+        )
+
+        return tdf
+
+
+
+
+
 
 
 
