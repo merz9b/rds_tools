@@ -19,24 +19,3 @@ exchange = meta.tables.get('exchange')
 underlying = meta.tables.get('underlying')
 model_params = meta.tables.get('model_params')
 
-
-#
-# import warnings
-#
-#
-# warnings.filterwarnings("ignore", category=DeprecationWarning)
-#
-# def fxn():
-#     warnings.warn("deprecated", DeprecationWarning)
-#
-#
-#
-# def f2():
-#     fxn()
-#
-#
-# f2()
-#
-# with warnings.catch_warnings():
-#     warnings.simplefilter('ignore')
-#     f2()
