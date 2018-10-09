@@ -58,8 +58,6 @@ pd.read_sql(select([model_params]).where(
 
 
 #
-
-
 res_tmp = mysql_conf.production_engine().execute(
     select([distinct(model_params.c.modelinstance)]).where(model_params.c.accountid == 20)
 ).fetchall()
@@ -156,16 +154,13 @@ print(FuturexDB.get_account_id_map_by_master_id('14001'))
 # GetTraderId
 print(FuturexDB.get_trader_id_by_master_id('14001'))
 
-
-
-
-
-
 print(FuturexDB._fxdb_cache)
 
 FuturexDB.clear_all_cache()
 
 print(FuturexDB._fxdb_cache)
+
+
 
 
 def query_frame_from_table(table, column_list = None, conditions = None):
@@ -194,9 +189,6 @@ query_frame_from_table(underlying,
                        ])
 
 
-
-
-
 pd.read_sql(
     select([order_record_otc]).where(
         and_(
@@ -207,3 +199,114 @@ pd.read_sql(
     ),
     order_record_otc.bind
 )
+
+
+
+import abc
+
+class Greeks:
+    def __init__(self):
+        self._delta = None
+        self._gamma = None
+        self._rho = None
+        self._theta = None
+        self._vega = None
+    @property
+    def delta(self):
+        return self._delta
+    @property
+    def gamma(self):
+        return self._gamma
+    @property
+    def rho(self):
+        return self._rho
+    @property
+    def theta(self):
+        return self._theta
+    @property
+    def vega(self):
+        return self._vega
+
+    @delta.setter
+    def delta(self, delta):
+        self._delta = delta
+
+    @gamma.setter
+    def gamma(self, gamma):
+        self._gamma = gamma
+
+    @rho.setter
+    def rho(self, rho):
+        self._rho = rho
+
+    @theta.setter
+    def theta(self, theta):
+        self._theta = theta
+
+    @vega.setter
+    def vega(self, vega):
+        self._vega = vega
+
+    def to_dict(self):
+
+        return {
+            'delta':self.delta,
+            'gamma':self.gamma,
+            'rho':self.rho,
+            'theta':self.theta,
+            'vega':self.vega
+        }
+
+
+class TypeChain:
+    def __init__(self):
+        pass
+
+
+
+greeks = Greeks()
+
+greeks.vega = 1
+greeks.delta = 100
+greeks.theta = 21
+greeks.gamma = 30
+greeks.rho = 10
+
+greeks.to_dict()
+
+
+
+
+
+class Option(metaclass= abc.ABCMeta):
+
+    @abc.abstractmethod
+    def greeks(self):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def NPV(self):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def set_process(self, process):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def set_type(self, option_type):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def set_engine(self, pricing_engine):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def set_parameters(self, underlying_price, strike_price, volatility, start_date, end_date, r, dividend = None):
+        raise NotImplementedError
+
+
+
+
+
+
+
