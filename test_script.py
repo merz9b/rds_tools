@@ -4,13 +4,18 @@
 # @Author  : John
 # @File    : test_script.py
 
-
-
 from rds_tools.utils.config_parser import mysql_conf
 
-from rds_tools.models.tables import (underlying, exchange, model_params,
-                                     contract_info, model_paramdef, client_terminal,
-                                     portfolio, accountid_map, order_record_otc)
+from rds_tools.models.tables import (
+    underlying,
+    exchange,
+    model_params,
+    contract_info,
+    model_paramdef,
+    client_terminal,
+    portfolio,
+    accountid_map,
+    order_record_otc)
 
 from rds_tools.select import FuturexDB
 
@@ -45,14 +50,12 @@ print(FuturexDB.get_contract_zh('CFFEX', 'T'))
 print(FuturexDB.get_underlying())
 
 
-
 print(FuturexDB.get_multiplier('rb'))
 
 
 # > OptionCalc
 # GetContract.py
 print(FuturexDB.get_contract('DCE', 'C'))
-
 
 
 # > OrderManagement
@@ -79,7 +82,6 @@ print(FuturexDB.get_role_by_role_type('13'))
 print(FuturexDB.get_role_by_role_type('14'))
 
 
-
 # > RiskManagement
 # GetPoSymbol.py
 print(FuturexDB.get_portfolio_by_id('12001'))
@@ -99,9 +101,10 @@ print(FuturexDB.get_trader_id_by_master_id('14001'))
 
 # GetPortDetail.py
 # GetPortDetail
-print(FuturexDB.get_order_record_by_symbol_traderid('OTC-DCE-i',12001))
+print(FuturexDB.get_order_record_by_symbol_traderid('OTC-DCE-i', 12001))
 # GetPortDetail2
-print(FuturexDB.get_order_record_by_model_instance('ovo_13001_11005_1533785827.5574322'))
+print(FuturexDB.get_order_record_by_model_instance(
+    'ovo_13001_11005_1533785827.5574322'))
 # GetPortSub
 print(FuturexDB.get_ref_contract())
 
@@ -113,29 +116,29 @@ FuturexDB.clear_all_cache()
 print(FuturexDB._fxdb_cache)
 
 
-
 def insert_data(data_list, conditions, table):
     pass
+
 
 def update_data(data, condition, table):
     pass
 
 
-
-
 ############################################################
 # ORM Example
 
-pd.read_sql(select([underlying]).where(underlying.c.underlying_symbol == 'rb'), mysql_conf.production_engine())
-
+pd.read_sql(
+    select(
+        [underlying]).where(
+            underlying.c.underlying_symbol == 'rb'),
+    mysql_conf.production_engine())
 
 
 pd.read_sql(select([underlying]), mysql_conf.production_engine())
 
 
-s = underlying.bind.execute(
-    select([underlying.c.multiplier]).where(underlying.c.underlying_symbol == 'rb')
-)
+s = underlying.bind.execute(select([underlying.c.multiplier]).where(
+    underlying.c.underlying_symbol == 'rb'))
 
 print(s.rowcount)
 print(s.returns_rows)
@@ -144,42 +147,38 @@ print(s.returns_rows)
 float(s.scalar())
 
 
-
-stmt = select([underlying.c.multiplier]).where(underlying.c.underlying_symbol == 'rb')
+stmt = select([underlying.c.multiplier]).where(
+    underlying.c.underlying_symbol == 'rb')
 
 stmt.execute().scalar()
 
 
-
-
-modelinstance = '{exchange}-{index}'.format(exchange= 'DCE', index= 'C')
+modelinstance = '{exchange}-{index}'.format(exchange='DCE', index='C')
 
 res_1 = model_params.bind.execute(
-    select([model_params]).where(
-        and_(model_params.c.accountid == 20,
-             model_params.c.model == 'wing',
-             model_params.c.modelinstance.like('%{ml}%'.format(ml =modelinstance)))
-    )
-).fetchall()
-
+    select(
+        [model_params]).where(
+            and_(
+                model_params.c.accountid == 20,
+                model_params.c.model == 'wing',
+                model_params.c.modelinstance.like(
+                    '%{ml}%'.format(
+                        ml=modelinstance))))).fetchall()
 
 
 pd.read_sql(select([model_params]).where(
-        and_(model_params.c.accountid == 20,
-             model_params.c.model == 'wing',
-             model_params.c.modelinstance.like('%{ml}%'.format(ml =modelinstance)))
-    ), mysql_conf.production_engine())
+    and_(model_params.c.accountid == 20,
+         model_params.c.model == 'wing',
+         model_params.c.modelinstance.like('%{ml}%'.format(ml=modelinstance)))
+), mysql_conf.production_engine())
 
 
-
-
-
-
-def query_frame_from_table(table, column_list = None, conditions = None):
+def query_frame_from_table(table, column_list=None, conditions=None):
     if column_list is None:
         select_param = [table]
     else:
-        assert isinstance(column_list, list), 'Expected type of column_list is list, given: %s'%(type(column_list))
+        assert isinstance(column_list, list), 'Expected type of column_list is list, given: %s' % (
+            type(column_list))
         select_param = [table.c.get(s) for s in column_list]
 
     if conditions is None:
@@ -193,10 +192,9 @@ def query_frame_from_table(table, column_list = None, conditions = None):
         )
 
 
-
 query_frame_from_table(underlying,
-                 column_list=['underlying_symbol'],
-                       conditions= [
+                       column_list=['underlying_symbol'],
+                       conditions=[
                            underlying.c.underlying_symbol == 'OI'
                        ])
 
@@ -213,8 +211,8 @@ pd.read_sql(
 )
 
 
-
 import abc
+
 
 class Greeks:
     def __init__(self):
@@ -223,18 +221,23 @@ class Greeks:
         self._rho = None
         self._theta = None
         self._vega = None
+
     @property
     def delta(self):
         return self._delta
+
     @property
     def gamma(self):
         return self._gamma
+
     @property
     def rho(self):
         return self._rho
+
     @property
     def theta(self):
         return self._theta
+
     @property
     def vega(self):
         return self._vega
@@ -262,11 +265,11 @@ class Greeks:
     def to_dict(self):
 
         return {
-            'delta':self.delta,
-            'gamma':self.gamma,
-            'rho':self.rho,
-            'theta':self.theta,
-            'vega':self.vega
+            'delta': self.delta,
+            'gamma': self.gamma,
+            'rho': self.rho,
+            'theta': self.theta,
+            'vega': self.vega
         }
 
     def __str__(self):
@@ -275,21 +278,18 @@ class Greeks:
     __repr__ = __str__
 
 
-
-
 class OptionType(object):
 
     def __init__(self, root_type=''):
         self._path = root_type
 
     def __getattr__(self, path):
-        return OptionType('{0}/{1}'.format (self._path, path))
+        return OptionType('{0}/{1}'.format(self._path, path))
 
     def __str__(self):
         return self._path
 
     __repr__ = __str__
-
 
 
 print(OptionType().Euro.Call)
@@ -309,16 +309,13 @@ greeks.gamma = 30
 greeks.rho = 10
 
 
-
 greeks.to_dict()
 
 
 print(greeks.to_dict())
 
 
-
-
-class AbstractOption(metaclass= abc.ABCMeta):
+class AbstractOption(metaclass=abc.ABCMeta):
 
     def __init__(self):
 
@@ -333,6 +330,7 @@ class AbstractOption(metaclass= abc.ABCMeta):
         self.__option_type = None
         self.__NPV = None
         self.__greeks = Greeks()
+
     @property
     def oid(self):
         return 1
@@ -371,15 +369,21 @@ class AbstractOption(metaclass= abc.ABCMeta):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def set_parameters(self, underlying_price, strike_price, volatility, start_date, end_date, r, dividend = None):
+    def set_parameters(
+            self,
+            underlying_price,
+            strike_price,
+            volatility,
+            start_date,
+            end_date,
+            r,
+            dividend=None):
         raise NotImplementedError
 
 
+class AbstractPricingMachine(metaclass=abc.ABCMeta):
 
-
-class AbstractPricingMachine(metaclass= abc.ABCMeta):
-
-    def __init__(self, option:AbstractOption):
+    def __init__(self, option: AbstractOption):
         self.option = option
 
     @abc.abstractmethod
@@ -397,26 +401,31 @@ class AbstractPricingMachine(metaclass= abc.ABCMeta):
         raise NotImplementedError
 
 
-
 class Pricing(AbstractPricingMachine):
     def compute_price(self, compute_engine):
         pass
+
     def compute_greeks(self):
         pass
 
 
 import abc
 # option
+
+
 class opt_1:
     def __init__(self):
         self.price = None
+
     @property
     def oid(self):
         return 1
 
+
 class opt_2:
     def __init__(self):
         self.price = None
+
     @property
     def oid(self):
         return 2
@@ -424,13 +433,15 @@ class opt_2:
 
 method_dict = {}
 
+
 def add_method(cls_ins):
     method_dict[cls_ins.id] = cls_ins()
     return cls_ins
 
 
-class AbstractPricing(metaclass= abc.ABCMeta):
+class AbstractPricing(metaclass=abc.ABCMeta):
     id = None
+
     @abc.abstractmethod
     def __call__(self, option):
         raise NotImplementedError
@@ -439,13 +450,16 @@ class AbstractPricing(metaclass= abc.ABCMeta):
 @add_method
 class PA(AbstractPricing):
     id = 1
+
     def __call__(self, option):
         assert option.oid == self.id, 'Wrong type of option'
         option.price = 1
 
+
 @add_method
 class PB(AbstractPricing):
     id = 2
+
     def __call__(self, option):
         assert option.oid == self.id, 'Wrong type of option'
         option.price = 2
@@ -455,29 +469,27 @@ def pricing(option):
     method_dict[option.oid](option)
 
 
-
 o1 = opt_1()
 print(o1.price)
 # compute
 pricing(o1)
-print(o1.price) # auto call PA to price o1
+print(o1.price)  # auto call PA to price o1
 
 
 o2 = opt_2()
 print(o2.price)
 # compute price
 pricing(o2)
-print(o2.price) # auto call PB to price o2
+print(o2.price)  # auto call PB to price o2
 
 PA()(o2)
-
 
 
 import pandas as pd
 
 num = 7.5
 
-tmp = pd.DataFrame({'a':[10,8,14,3,7]})
+tmp = pd.DataFrame({'a': [10, 8, 14, 3, 7]})
 
 
 r1 = tmp[lambda x: x['a'].sub(num).abs().pipe(lambda x: x == x.min())]

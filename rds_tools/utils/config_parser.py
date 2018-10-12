@@ -12,6 +12,7 @@ from rds_tools import PROJECT_PATH
 
 from .tools import get_public_ip
 
+
 class JsonConfig:
     def __init__(self, config_path):
         self.path = config_path
@@ -26,7 +27,13 @@ class JsonConfig:
 
 class MysqlConfig(JsonConfig):
     def __init__(self):
-        super(MysqlConfig, self).__init__(os.path.join(PROJECT_PATH, 'db_configs', 'connection_info.json'))
+        super(
+            MysqlConfig,
+            self).__init__(
+            os.path.join(
+                PROJECT_PATH,
+                'db_configs',
+                'connection_info.json'))
 
     def test_info(self):
         if not self.is_read:
@@ -41,7 +48,7 @@ class MysqlConfig(JsonConfig):
     def test_engine(self):
         pass
 
-    def production_engine(self, user  = 'gxqh'):
+    def production_engine(self, user='gxqh'):
         conn_str = '''mysql+pymysql://{usr}:{pwd}@{ip}:{port}/{db}?charset=utf8'''
         info = self.production_info()
         if user == 'localuser':
@@ -52,6 +59,4 @@ class MysqlConfig(JsonConfig):
         return create_engine(conn_str.format(**info[user]))
 
 
-
 mysql_conf = MysqlConfig()
-

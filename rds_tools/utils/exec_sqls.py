@@ -6,13 +6,15 @@
 
 
 import pandas as pd
-from sqlalchemy.sql import select,and_
+from sqlalchemy.sql import select, and_
 
-def query_frame_from_table(table, column_list = None, conditions = None):
+
+def query_frame_from_table(table, column_list=None, conditions=None):
     if column_list is None:
         select_param = [table]
     else:
-        assert isinstance(column_list, list), 'Expected type of column_list is list, given: %s'%(type(column_list))
+        assert isinstance(column_list, list), 'Expected type of column_list is list, given: %s' % (
+            type(column_list))
         select_param = [table.c.get(s) for s in column_list]
 
     if conditions is None:
