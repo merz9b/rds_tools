@@ -1,11 +1,11 @@
 
 # Guosen Option Rds Tools
 
-## Usages
+## Setup
 
 - modify the config file `connection_info.json.bak` to `connection_info.json` and fill the info
 
-## Cases
+## Query Cases
 
 ```python
 from rds_tools.select import FuturexDB
