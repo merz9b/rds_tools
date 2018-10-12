@@ -63,14 +63,10 @@ class FuturexDB:
     @classmethod
     def get_future_info(cls, account_id = 20):
 
-        res_tmp = model_params.bind.execute(
-            select(
+        res_tmp = select(
                 [distinct(model_params.c.modelinstance)]
-                )
-            .where(
-                model_params.c.accountid == account_id
-                )
-            ).fetchall()
+                ).where(
+                model_params.c.accountid == account_id).execute().fetchall()
 
         return list(set(map(lambda x: '-'.join(x[0].split('-')[:-1]), res_tmp)))
 
@@ -82,10 +78,7 @@ class FuturexDB:
 
         if cls._fxdb_cache['exchange_zh'].get(exchange_name) is None:
 
-            res = exchange.bind.execute(
-                select([exchange.c.desc_zh]).where(exchange.c.symbol == exchange_name)
-            ).scalar()
-
+            res = select([exchange.c.desc_zh]).where(exchange.c.symbol == exchange_name).execute().scalar()
 
             cls._fxdb_cache['exchange_zh'][exchange_name] = res
 
@@ -102,13 +95,11 @@ class FuturexDB:
 
         if cls._fxdb_cache['contract_zh'].get((exchange_name, underlying_name)) is None:
 
-            res = underlying.bind.execute(
-                select([underlying.c.desc_zh]).where(
+            res = select([underlying.c.desc_zh]).where(
                     and_(
                         underlying.c.exchange_symbol == exchange_name,
                         underlying.c.underlying_symbol == underlying_name)
-                )
-            ).scalar()
+                ).execute().scalar()
 
             cls._fxdb_cache['contract_zh'][(exchange_name, underlying_name)] = res
 
@@ -155,9 +146,7 @@ class FuturexDB:
 
         if cls._fxdb_cache['ud_multiplier'].get(underlying_symbol) is None:
 
-            s = underlying.bind.execute(
-                select([underlying.c.multiplier]).where(underlying.c.underlying_symbol == underlying_symbol)
-            ).scalar()
+            s = select([underlying.c.multiplier]).where(underlying.c.underlying_symbol == underlying_symbol).execute().scalar()
 
             res = float(s)
 
@@ -174,13 +163,11 @@ class FuturexDB:
         if date_ is None:
             date_ = datetime.now().date()
 
-        contract_list = contract_info.bind.execute(
-            select([contract_info.c.contract_symbol]).where(and_(
+        contract_list = select([contract_info.c.contract_symbol]).where(and_(
                 contract_info.c.exchange_symbol == exchange_,
                 contract_info.c.underlying_symbol == contract_,
                 contract_info.c.expiration > date_
-            ))
-        ).fetchall()
+            )).execute().fetchall()
 
         return [s[0] for s in contract_list]
 
@@ -208,6 +195,7 @@ class FuturexDB:
         tdf = read_sql(select([model_params]).where(
             and_(model_params.c.accountid == account_id,
                  model_params.c.modelinstance == model_instance)), model_params.bind)
+
         param_data = tdf.pivot('modelinstance', 'paramname', 'paramstring')
 
         return param_data
@@ -288,6 +276,31 @@ class FuturexDB:
         )
 
         return tdf
+
+    @classmethod
+    def get_order_record_by_model_instance(cls, model_instance):
+
+        tdf = read_sql(
+            select([order_record_otc]).where(
+                and_(
+                    order_record_otc.c.modelinstance == model_instance
+                )
+            ),
+            order_record_otc.bind
+        )
+
+        return tdf
+
+    @classmethod
+    def get_ref_contract(cls):
+
+        res = select([model_params.c.paramstring]).where(
+                and_(model_params.c.model.in_(['oao', 'ovo']),
+                     model_params.c.paramname == 'ref_contract'))\
+            .execute().fetchall()
+
+        return list(set(r[0] for r in res))
+
 
 
 

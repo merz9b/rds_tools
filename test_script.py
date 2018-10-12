@@ -18,67 +18,10 @@ import pandas as pd
 
 from sqlalchemy.sql import select, and_, distinct
 
-
-pd.read_sql(select([underlying]).where(underlying.c.underlying_symbol == 'rb'), mysql_conf.production_engine())
-
+# Reference Documents
 
 
-pd.read_sql(select([underlying]), mysql_conf.production_engine())
-
-
-s = underlying.bind.execute(
-    select([underlying.c.multiplier]).where(underlying.c.underlying_symbol == 'rb')
-)
-
-print(s.rowcount)
-print(s.returns_rows)
-
-
-float(s.scalar())
-
-
-modelinstance = '{exchange}-{index}'.format(exchange= 'DCE', index= 'C')
-
-res_1 = model_params.bind.execute(
-    select([model_params]).where(
-        and_(model_params.c.accountid == 20,
-             model_params.c.model == 'wing',
-             model_params.c.modelinstance.like('%{ml}%'.format(ml =modelinstance)))
-    )
-).fetchall()
-
-
-
-pd.read_sql(select([model_params]).where(
-        and_(model_params.c.accountid == 20,
-             model_params.c.model == 'wing',
-             model_params.c.modelinstance.like('%{ml}%'.format(ml =modelinstance)))
-    ), mysql_conf.production_engine())
-
-
-
-#
-res_tmp = mysql_conf.production_engine().execute(
-    select([distinct(model_params.c.modelinstance)]).where(model_params.c.accountid == 20)
-).fetchall()
-
-res = list(set(map(lambda x:'-'.join(x[0].split('-')[:-1]), res_tmp)))
-
-
-pd.read_sql(exchange.select().where(exchange.c.symbol == 'CBOE'), mysql_conf.production_engine())
-
-
-mysql_conf.production_engine().execute(exchange.select().where(exchange.c.symbol == 'CBOE')).fetchone()
-
-
-mysql_conf.production_engine().execute(
-    select([underlying.c.desc_zh]).where(
-        and_(underlying.c.exchange_symbol == 'CFFEX',underlying.c.underlying_symbol == 'T')
-    )
-).scalar()
-
-
-
+# ALL SELECT
 # > Volatility Model
 # GetDataMySQL.py
 
@@ -154,11 +97,80 @@ print(FuturexDB.get_account_id_map_by_master_id('14001'))
 # GetTraderId
 print(FuturexDB.get_trader_id_by_master_id('14001'))
 
+# GetPortDetail.py
+# GetPortDetail
+print(FuturexDB.get_order_record_by_symbol_traderid('OTC-DCE-i',12001))
+# GetPortDetail2
+print(FuturexDB.get_order_record_by_model_instance('ovo_13001_11005_1533785827.5574322'))
+# GetPortSub
+print(FuturexDB.get_ref_contract())
+
 print(FuturexDB._fxdb_cache)
+
 
 FuturexDB.clear_all_cache()
 
 print(FuturexDB._fxdb_cache)
+
+
+
+def insert_data(data_list, conditions, table):
+    pass
+
+def update_data(data, condition, table):
+    pass
+
+
+
+
+############################################################
+# ORM Example
+
+pd.read_sql(select([underlying]).where(underlying.c.underlying_symbol == 'rb'), mysql_conf.production_engine())
+
+
+
+pd.read_sql(select([underlying]), mysql_conf.production_engine())
+
+
+s = underlying.bind.execute(
+    select([underlying.c.multiplier]).where(underlying.c.underlying_symbol == 'rb')
+)
+
+print(s.rowcount)
+print(s.returns_rows)
+
+
+float(s.scalar())
+
+
+
+stmt = select([underlying.c.multiplier]).where(underlying.c.underlying_symbol == 'rb')
+
+stmt.execute().scalar()
+
+
+
+
+modelinstance = '{exchange}-{index}'.format(exchange= 'DCE', index= 'C')
+
+res_1 = model_params.bind.execute(
+    select([model_params]).where(
+        and_(model_params.c.accountid == 20,
+             model_params.c.model == 'wing',
+             model_params.c.modelinstance.like('%{ml}%'.format(ml =modelinstance)))
+    )
+).fetchall()
+
+
+
+pd.read_sql(select([model_params]).where(
+        and_(model_params.c.accountid == 20,
+             model_params.c.model == 'wing',
+             model_params.c.modelinstance.like('%{ml}%'.format(ml =modelinstance)))
+    ), mysql_conf.production_engine())
+
+
 
 
 
@@ -257,14 +269,38 @@ class Greeks:
             'vega':self.vega
         }
 
+    def __str__(self):
+        return str(self.to_dict())
 
-class TypeChain:
-    def __init__(self):
-        pass
+    __repr__ = __str__
 
 
+
+
+class OptionType(object):
+
+    def __init__(self, root_type=''):
+        self._path = root_type
+
+    def __getattr__(self, path):
+        return OptionType('{0}/{1}'.format (self._path, path))
+
+    def __str__(self):
+        return self._path
+
+    __repr__ = __str__
+
+
+
+print(OptionType().Euro.Call)
+
+print(OptionType().America.Call)
+
+print(OptionType().Setting.Fold)
 
 greeks = Greeks()
+
+print(greeks)
 
 greeks.vega = 1
 greeks.delta = 100
@@ -272,13 +308,34 @@ greeks.theta = 21
 greeks.gamma = 30
 greeks.rho = 10
 
+
+
 greeks.to_dict()
 
 
+print(greeks.to_dict())
 
 
 
-class Option(metaclass= abc.ABCMeta):
+
+class AbstractOption(metaclass= abc.ABCMeta):
+
+    def __init__(self):
+
+        self.underlying_price = None
+        self.strike_price = None
+        self.volatility = None
+        self.start_date = None
+        self.end_date = None
+        self.r = None
+        self.dividend = None
+        self.__price_process = None
+        self.__option_type = None
+        self.__NPV = None
+        self.__greeks = Greeks()
+    @property
+    def oid(self):
+        return 1
 
     @abc.abstractmethod
     def greeks(self):
@@ -290,14 +347,27 @@ class Option(metaclass= abc.ABCMeta):
 
     @abc.abstractmethod
     def set_process(self, process):
+        """
+        price movements process
+        :param process: default, BSM
+        :return: None
+        """
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def set_exercise(self, exercise_type):
+        """
+        set European or American
+        :param exercise_type:
+        :return: None
+        """
     @abc.abstractmethod
     def set_type(self, option_type):
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def set_engine(self, pricing_engine):
+        """
+        set call or put
+        :param option_type:
+        :return: None
+        """
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -307,6 +377,109 @@ class Option(metaclass= abc.ABCMeta):
 
 
 
+class AbstractPricingMachine(metaclass= abc.ABCMeta):
+
+    def __init__(self, option:AbstractOption):
+        self.option = option
+
+    @abc.abstractmethod
+    def compute_price(self, compute_engine):
+        """
+        using compute engine to get option price
+        :param compute_engine: theoretical or MC
+        :return: None
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def compute_greeks(self):
+
+        raise NotImplementedError
 
 
 
+class Pricing(AbstractPricingMachine):
+    def compute_price(self, compute_engine):
+        pass
+    def compute_greeks(self):
+        pass
+
+
+import abc
+# option
+class opt_1:
+    def __init__(self):
+        self.price = None
+    @property
+    def oid(self):
+        return 1
+
+class opt_2:
+    def __init__(self):
+        self.price = None
+    @property
+    def oid(self):
+        return 2
+
+
+method_dict = {}
+
+def add_method(cls_ins):
+    method_dict[cls_ins.id] = cls_ins()
+    return cls_ins
+
+
+class AbstractPricing(metaclass= abc.ABCMeta):
+    id = None
+    @abc.abstractmethod
+    def __call__(self, option):
+        raise NotImplementedError
+
+
+@add_method
+class PA(AbstractPricing):
+    id = 1
+    def __call__(self, option):
+        assert option.oid == self.id, 'Wrong type of option'
+        option.price = 1
+
+@add_method
+class PB(AbstractPricing):
+    id = 2
+    def __call__(self, option):
+        assert option.oid == self.id, 'Wrong type of option'
+        option.price = 2
+
+
+def pricing(option):
+    method_dict[option.oid](option)
+
+
+
+o1 = opt_1()
+print(o1.price)
+# compute
+pricing(o1)
+print(o1.price) # auto call PA to price o1
+
+
+o2 = opt_2()
+print(o2.price)
+# compute price
+pricing(o2)
+print(o2.price) # auto call PB to price o2
+
+PA()(o2)
+
+
+
+import pandas as pd
+
+num = 7.5
+
+tmp = pd.DataFrame({'a':[10,8,14,3,7]})
+
+
+r1 = tmp[lambda x: x['a'].sub(num).abs().pipe(lambda x: x == x.min())]
+
+r2 = tmp.loc[tmp['a'].sub(num).abs().nsmallest(1).index]

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/9/27 14:58
 # @Author  : John
-# @File    : read_sqls.py
+# @File    : exec_sqls.py
 
 
 import pandas as pd
@@ -24,3 +24,11 @@ def query_frame_from_table(table, column_list = None, conditions = None):
                 and_(*conditions)
             ), table.bind
         )
+
+
+def insert_into_db(table, list_of_content):
+    feedback = table.bind.execute(
+        table.insert(),
+        list_of_content
+    )
+    return feedback
