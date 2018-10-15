@@ -6,6 +6,8 @@
 
 from rds_tools.utils.config_parser import mysql_conf
 
+import time
+
 from rds_tools.models.tables import (
     underlying,
     model_params,
@@ -15,11 +17,60 @@ from rds_tools.db_executor import FuturexDB
 
 import pandas as pd
 
-from sqlalchemy.sql import select, and_
+from sqlalchemy.sql import select, and_, insert
 
 from rds_tools.models.tables import usermodels
 
-pd.read_sql(select([usermodels]), usermodels.bind)
+time.time()
+
+s1 = {
+    'exercise_type':'0',
+    'exp_date':'2018-06-13',
+    'init_date':'2018-06-13',
+    'option_type':'1',
+    'ref_contract':'c1901',
+    'ref_exchange':'DCE',
+    'ref_underlying':'c',
+    'strike':'1820'
+}
+
+# ordername
+model_instance = 'ovo123' # fk
+model_name = 'ovo'
+account_id = '13001'  # fk
+
+# new order api
+FuturexDB.insert.new_order(model_instance, model_name, account_id)
+
+# new param data api
+FuturexDB.insert.new_param_data(s1, model_instance,model_name, account_id)
+
+# new create order api
+FuturexDB.insert.create_order(model_instance, model_name, account_id, s1)
+
+
+# deleting
+rsp_d1 = model_params.bind.execute(
+    model_params.delete().where(
+        model_params.c.modelinstance == model_instance
+    )
+)
+
+rsp_d1.close()
+print(rsp_d1.rowcount)
+print(rsp_d1.closed)
+
+rsp_d2 = usermodels.bind.execute(
+    usermodels.delete().where(
+        usermodels.c.modelinstance == model_instance
+    )
+)
+rsp_d2.close()
+print(rsp_d2.rowcount)
+print(rsp_d2.closed)
+
+
+
 
 
 # Reference Documents

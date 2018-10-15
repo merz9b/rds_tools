@@ -4,7 +4,9 @@
 # @File    : __init__.py.py
 
 from .select import DbSelect
+from .insert import DbInsert
 
 
 class FuturexDB:
     select = DbSelect
+    insert = DbInsert
