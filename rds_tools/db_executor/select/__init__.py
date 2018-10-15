@@ -5,4 +5,4 @@
 # @File    : __init__.py
 
 
-from .select_scripts import FuturexDB
+from .select_scripts import DbSelect

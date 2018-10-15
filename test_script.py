@@ -8,20 +8,19 @@ from rds_tools.utils.config_parser import mysql_conf
 
 from rds_tools.models.tables import (
     underlying,
-    exchange,
     model_params,
-    contract_info,
-    model_paramdef,
-    client_terminal,
-    portfolio,
-    accountid_map,
     order_record_otc)
 
-from rds_tools.select import FuturexDB
+from rds_tools.db_executor import FuturexDB
 
 import pandas as pd
 
-from sqlalchemy.sql import select, and_, distinct
+from sqlalchemy.sql import select, and_
+
+from rds_tools.models.tables import usermodels
+
+pd.read_sql(select([usermodels]), usermodels.bind)
+
 
 # Reference Documents
 
@@ -30,90 +29,91 @@ from sqlalchemy.sql import select, and_, distinct
 # > Volatility Model
 # GetDataMySQL.py
 
-print(FuturexDB.get_param_data('DCE', 'C').head())
+print(FuturexDB.select.get_param_data('DCE', 'C').head())
 
-print(FuturexDB.get_param_data_std('DCE', 'C'))
+print(FuturexDB.select.get_param_data_std('DCE', 'C'))
 
-print(FuturexDB.get_future_info())
+print(FuturexDB.select.get_future_info())
 
 
 # PyMySQLreadZH.py
 
-print(FuturexDB.get_exchange_zh('CBOE'))
+print(FuturexDB.select.get_exchange_zh('CBOE'))
 
-print(FuturexDB.get_exchange_zh('LME'))
+print(FuturexDB.select.get_exchange_zh('LME'))
 
-print(FuturexDB.get_contract_zh('CFFEX', 'T'))
+print(FuturexDB.select.get_contract_zh('CFFEX', 'T'))
 
 
 # GetUnderling.py
-print(FuturexDB.get_underlying())
+print(FuturexDB.select.get_underlying())
 
 
-print(FuturexDB.get_multiplier('rb'))
+print(FuturexDB.select.get_multiplier('rb'))
 
 
 # > OptionCalc
 # GetContract.py
-print(FuturexDB.get_contract('DCE', 'C'))
+print(FuturexDB.select.get_contract('DCE', 'C'))
 
 
 # > OrderManagement
 # GetModelParamName.py
 # replace GetContract
-print(FuturexDB.get_paramdef_by_model('ovo'))
+print(FuturexDB.select.get_paramdef_by_model('ovo'))
 
 # GetOrderList.py
 # replace GetOrderList
-print(FuturexDB.get_order_record_otc('13001'))
+print(FuturexDB.select.get_order_record_otc('13001'))
 
 
 # GetOrderParam.py
-print(FuturexDB.get_order_param('13001', 'ovo_13001_11005_1533785827.5574322'))
+print(FuturexDB.select.get_order_param(
+    '13001', 'ovo_13001_11005_1533785827.5574322'))
 
 
 # GetRoleName.py
-print(FuturexDB.get_role_by_name('13001'))
+print(FuturexDB.select.get_role_by_name('13001'))
 
 # GetRoletype.py | RiskManagement/GetRiskList.py/GetRiskList
-print(FuturexDB.get_role_by_role_type('13'))
+print(FuturexDB.select.get_role_by_role_type('13'))
 
 # risk list
-print(FuturexDB.get_role_by_role_type('14'))
+print(FuturexDB.select.get_role_by_role_type('14'))
 
 
 # > RiskManagement
 # GetPoSymbol.py
-print(FuturexDB.get_portfolio_by_id('12001'))
+print(FuturexDB.select.get_portfolio_by_id('12001'))
 
 
 # GetRiskList.py
-print(FuturexDB.get_order_by_risk_id('14001'))
+print(FuturexDB.select.get_order_by_risk_id('14001'))
 
 
 # GetTraderId.py
 
 # GetSlaveId
-print(FuturexDB.get_account_id_map_by_master_id('14001'))
+print(FuturexDB.select.get_account_id_map_by_master_id('14001'))
 
 # GetTraderId
-print(FuturexDB.get_trader_id_by_master_id('14001'))
+print(FuturexDB.select.get_trader_id_by_master_id('14001'))
 
 # GetPortDetail.py
 # GetPortDetail
-print(FuturexDB.get_order_record_by_symbol_traderid('OTC-DCE-i', 12001))
+print(FuturexDB.select.get_order_record_by_symbol_traderid('OTC-DCE-i', 12001))
 # GetPortDetail2
-print(FuturexDB.get_order_record_by_model_instance(
+print(FuturexDB.select.get_order_record_by_model_instance(
     'ovo_13001_11005_1533785827.5574322'))
 # GetPortSub
-print(FuturexDB.get_ref_contract())
+print(FuturexDB.select.get_ref_contract())
 
-print(FuturexDB._fxdb_cache)
+print(FuturexDB.select._fxdb_cache)
 
 
-FuturexDB.clear_all_cache()
+FuturexDB.select.clear_all_cache()
 
-print(FuturexDB._fxdb_cache)
+print(FuturexDB.select._fxdb_cache)
 
 
 def insert_data(data_list, conditions, table):
@@ -483,15 +483,3 @@ pricing(o2)
 print(o2.price)  # auto call PB to price o2
 
 PA()(o2)
-
-
-import pandas as pd
-
-num = 7.5
-
-tmp = pd.DataFrame({'a': [10, 8, 14, 3, 7]})
-
-
-r1 = tmp[lambda x: x['a'].sub(num).abs().pipe(lambda x: x == x.min())]
-
-r2 = tmp.loc[tmp['a'].sub(num).abs().nsmallest(1).index]
