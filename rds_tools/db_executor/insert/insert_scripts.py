@@ -12,19 +12,55 @@ warnings.filterwarnings('ignore', category=Warning)
 
 
 class DbInsert:
-    @classmethod
-    def new_order(cls, model_instance, model_name, account_id):
 
-        rsp = usermodels.bind.execute(
+    @classmethod
+    def _new_order(cls, model_instance, model_name, account_id, conn):
+
+        rsp = conn.execute(
             usermodels.insert().values(
                 accountid=account_id,
                 modelinstance=model_instance,
                 model=model_name
             )
         )
-        rsp.close()
 
         assert rsp.rowcount == 1, 'Failed to insert new order.'
+
+        return rsp
+
+    @classmethod
+    def new_order(cls, model_instance, model_name, account_id):
+        rsp = cls._new_order(
+            model_instance,
+            model_name,
+            account_id,
+            conn=meta_general.bind)
+        rsp.close()
+
+    @classmethod
+    def _new_param_data(
+            cls,
+            params_info: dict,
+            model_instance,
+            model_name,
+            account_id,
+            conn):
+
+        insert_list = [{'paramname': itm,
+                        'paramstring': v,
+                        'accountid': account_id,
+                        'modelinstance': model_instance,
+                        'model': model_name} for itm, v in params_info.items()]
+
+        rsp_ts = conn.execute(
+            model_params.insert(),
+            insert_list
+        )
+
+        assert rsp_ts.rowcount == len(
+            insert_list), 'Failed to insert all params.'
+
+        return rsp_ts
 
     @classmethod
     def new_param_data(
@@ -34,25 +70,17 @@ class DbInsert:
             model_name,
             account_id):
 
-        insert_list = [{'paramname': itm,
-                        'paramstring': v,
-                        'accountid': account_id,
-                        'modelinstance': model_instance,
-                        'model': model_name} for itm, v in params_info.items()]
-
         conn = model_params.bind.connect()
         # begin a transaction
         ts_bg = conn.begin()
 
         try:
-            rsp_ts = conn.execute(
-                model_params.insert(),
-                insert_list
-            )
-
-            assert rsp_ts.rowcount == len(
-                insert_list), 'Failed to insert all params.'
-
+            cls._new_param_data(
+                params_info,
+                model_instance,
+                model_name,
+                account_id,
+                conn=conn)
             ts_bg.commit()
 
         except BaseException:
@@ -70,37 +98,21 @@ class DbInsert:
             account_id,
             params_info: dict):
 
-        insert_list = [{'paramname': itm,
-                        'paramstring': v,
-                        'accountid': account_id,
-                        'modelinstance': model_instance,
-                        'model': model_name} for itm, v in params_info.items()]
-
         # start a connection
         conn = meta_general.bind.connect()
-
         # begin a transaction
         ts_bg = conn.begin()
 
         try:
             # insert new order
-            rsp_1 = conn.execute(
-                usermodels.insert().values(
-                    accountid=account_id,
-                    modelinstance=model_instance,
-                    model=model_name
-                )
-            )
-            assert rsp_1.rowcount == 1, 'Failed to insert new order.'
-
+            cls._new_order(model_instance, model_name, account_id, conn=conn)
             # insert model params data
-            rsp_ts = conn.execute(
-                model_params.insert(),
-                insert_list
-            )
-
-            assert rsp_ts.rowcount == len(
-                insert_list), 'Failed to insert all params.'
+            cls._new_param_data(
+                params_info,
+                model_instance,
+                model_name,
+                account_id,
+                conn=conn)
 
             ts_bg.commit()
         except BaseException:
