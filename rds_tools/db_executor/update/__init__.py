@@ -2,3 +2,5 @@
 # @Time    : 2018/10/15 10:13
 # @Author  : Xin Zhang
 # @File    : __init__.py
+
+from .update_scripts import DbUpdate

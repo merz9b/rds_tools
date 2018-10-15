@@ -5,7 +5,9 @@
 
 import warnings
 import traceback
-from rds_tools.models.tables import (meta_general, usermodels, model_params)
+from rds_tools.models.tables import (meta_general, meta_localuser,
+                                     usermodels, model_params,
+                                     order_record_otc)
 
 
 warnings.filterwarnings('ignore', category=Warning)
@@ -121,3 +123,35 @@ class DbInsert:
             traceback.print_exc()
         finally:
             conn.close()
+
+    @classmethod
+    def _new_order_record(
+            cls,
+            order_info: dict,
+            account_id,
+            model_instance,
+            conn):
+        order_i = dict(order_info)
+        order_i['accountid'] = account_id
+        order_i['modelinstance'] = model_instance
+
+        rsp = conn.execute(
+            order_record_otc.insert().values(
+                **order_i
+            )
+        )
+
+        assert rsp.rowcount == 1, 'Failed to insert new order record.'
+
+        return rsp
+
+    @classmethod
+    def new_order_record(cls, order_info: dict, account_id, model_instance):
+
+        rsp = cls._new_order_record(
+            order_info,
+            account_id,
+            model_instance,
+            conn=meta_localuser.bind)
+
+        rsp.close()

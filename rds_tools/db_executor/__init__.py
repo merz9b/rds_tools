@@ -5,8 +5,11 @@
 
 from .select import DbSelect
 from .insert import DbInsert
-
+from .update import DbUpdate
+from .delete import DbDelete
 
 class FuturexDB:
     select = DbSelect
     insert = DbInsert
+    update = DbUpdate
+    delete = DbDelete

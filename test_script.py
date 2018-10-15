@@ -24,32 +24,60 @@ from rds_tools.models.tables import usermodels
 time.time()
 
 s1 = {
-    'exercise_type':'0',
-    'exp_date':'2018-06-13',
-    'init_date':'2018-06-13',
-    'option_type':'1',
-    'ref_contract':'c1901',
-    'ref_exchange':'DCE',
-    'ref_underlying':'c',
-    'strike':'1820'
+    'exercise_type': '0',
+    'exp_date': '2018-06-13',
+    'init_date': '2018-06-13',
+    'option_type': '1',
+    'ref_contract': 'c1901',
+    'ref_exchange': 'DCE',
+    'ref_underlying': 'c',
+    'strike': '1820'
 }
 
 # ordername
-model_instance = 'ovo123' # fk
+model_instance = 'ovo123'  # fk
 model_name = 'ovo'
 account_id = '13001'  # fk
 
 # new order api
+# OrderManagement
+# NewOrder.py => NewOrder
 FuturexDB.insert.new_order(model_instance, model_name, account_id)
 
 # new param data api
-FuturexDB.insert.new_param_data(s1, model_instance,model_name, account_id)
+# OrderManagement
+# NewParamData.py => NewParamData
+FuturexDB.insert.new_param_data(s1, model_instance, model_name, account_id)
 
 # new create order api
+# OrderManagement
+# CreateOrder.py => CreateOrder
 FuturexDB.insert.create_order(model_instance, model_name, account_id, s1)
 
+# new order record api
+# OrderManagement
+# NewOrderRecord.py => NewOrderRecord
+s2 = {'customerid': '11001',
+      'riskid': '14001',
+      'price': '1234',
+      'quantity': '16',
+      'quantity_filled': '0',
+      'is_buy': '1',
+      'is_open': '1',
+      'exec_type': '9',
+      'tif': '0',
+      'status': '14',
+      'trading_type': '0',
+      'tradingday': '2018-09-01',
+      'errorcode': '0'}
+
+FuturexDB.insert.new_order_record(s2, account_id, model_instance)
+
+# update order_record_otc api
+FuturexDB.update.order_record_otc('status', '1', account_id, model_instance)
 
 # deleting
+# 1
 rsp_d1 = model_params.bind.execute(
     model_params.delete().where(
         model_params.c.modelinstance == model_instance
@@ -60,17 +88,20 @@ rsp_d1.close()
 print(rsp_d1.rowcount)
 print(rsp_d1.closed)
 
-rsp_d2 = usermodels.bind.execute(
-    usermodels.delete().where(
-        usermodels.c.modelinstance == model_instance
+# 2
+rsp_d3 = order_record_otc.bind.execute(
+    order_record_otc.delete().where(
+        order_record_otc.c.modelinstance == model_instance
     )
 )
-rsp_d2.close()
-print(rsp_d2.rowcount)
-print(rsp_d2.closed)
+rsp_d3.close()
+print(rsp_d3.rowcount)
+print(rsp_d3.closed)
 
-
-
+# 3
+# OrderManagement
+# DelOrder.py => DelOrder
+print(FuturexDB.delete.del_order(model_name, model_instance, account_id))
 
 
 # Reference Documents
