@@ -584,5 +584,26 @@ pricing(o2)
 print(o2.price)  # auto call PB to price o2
 
 # combination of o1 and o2
-o_combine = o1 + 0.5 * o2
+o_combine = o1 + 0.5 * o2 + o1
+
+pricing(o_combine)
+
 print(o_combine.price)
+
+
+def Result():
+    price_l = []
+    while True:
+        price = yield 1
+        price_l.append(price)
+        if len(price_l) == 3:
+            print(sum(price_l))
+
+
+res = Result()
+next(res)
+
+res.send(4)
+res.send(5)
+res.send(6)
+
