@@ -5,12 +5,12 @@
 
 - modify the config file `connection_info.json.bak` to `connection_info.json` and fill the info
 
+# Reference Documents
+
 ## Query Cases
 
 ```python
 from rds_tools.db_executor import FuturexDB
-
-# Reference Documents
 
 # ALL SELECT
 # > Volatility Model
@@ -113,5 +113,78 @@ print(FuturexDB.select._fxdb_cache)
 FuturexDB.select.clear_all_cache()
 
 print(FuturexDB.select._fxdb_cache)
+
+```
+
+## Insert, Update and Delete Cases
+
+```python
+from rds_tools.db_executor import FuturexDB
+
+option_1 = {
+    'exercise_type': '0',
+    'exp_date': '2018-06-13',
+    'init_date': '2018-06-13',
+    'option_type': '1',
+    'ref_contract': 'c1901',
+    'ref_exchange': 'DCE',
+    'ref_underlying': 'c',
+    'strike': '1820'
+}
+
+# ordername
+model_instance = 'ovo123'  # fk
+model_name = 'ovo'
+account_id = '13001'  # fk
+
+# new order api
+# OrderManagement
+# NewOrder.py => NewOrder
+FuturexDB.insert.new_order(model_instance, model_name, account_id)
+
+# new param data api
+# OrderManagement
+# NewParamData.py => NewParamData
+FuturexDB.insert.new_param_data(option_1, model_instance, model_name, account_id)
+
+# new create order api
+# OrderManagement
+# CreateOrder.py => CreateOrder
+FuturexDB.insert.create_order(model_instance, model_name, account_id, option_1)
+
+# new order record api
+# OrderManagement
+# NewOrderRecord.py => NewOrderRecord
+order_1 = {'customerid': '11001',
+      'riskid': '14001',
+      'price': '1234',
+      'quantity': '16',
+      'quantity_filled': '0',
+      'is_buy': '1',
+      'is_open': '1',
+      'exec_type': '9',
+      'tif': '0',
+      'status': '14',
+      'trading_type': '0',
+      'tradingday': '2018-09-01',
+      'errorcode': '0'}
+
+FuturexDB.insert.new_order_record(order_1, account_id, model_instance)
+
+# update order_record_otc api
+# OrderManagement | RiskManagement=>RiskMgt
+# UpdateOrderStatus.py=> UpdateOrderStatus
+FuturexDB.update.order_record_otc('status', '1', model_instance)
+
+# update model_params api
+# VolatilityModel
+# ChangeParamData.py => Writeparamdata
+FuturexDB.update.model_params('alpha','0','DCE','C','1')
+
+
+# delete order api
+# OrderManagement
+# DelOrder.py => DelOrder
+print(FuturexDB.delete.del_order(model_name, model_instance, account_id))
 
 ```

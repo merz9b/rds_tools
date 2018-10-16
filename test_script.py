@@ -74,7 +74,15 @@ s2 = {'customerid': '11001',
 FuturexDB.insert.new_order_record(s2, account_id, model_instance)
 
 # update order_record_otc api
-FuturexDB.update.order_record_otc('status', '1', account_id, model_instance)
+# OrderManagement | RiskManagement=>RiskMgt
+# UpdateOrderStatus.py=> UpdateOrderStatus
+FuturexDB.update.order_record_otc('status', '1', model_instance)
+
+# update model_params api
+# VolatilityModel
+# ChangeParamData.py => Writeparamdata
+FuturexDB.update.model_params('alpha', '0', 'DCE', 'C', '1')
+
 
 # deleting
 # 1
@@ -196,14 +204,6 @@ print(FuturexDB.select._fxdb_cache)
 FuturexDB.select.clear_all_cache()
 
 print(FuturexDB.select._fxdb_cache)
-
-
-def insert_data(data_list, conditions, table):
-    pass
-
-
-def update_data(data, condition, table):
-    pass
 
 
 ############################################################
@@ -495,19 +495,36 @@ import abc
 # option
 
 
-class opt_1:
+class OptionBase:
     def __init__(self):
         self.price = None
 
+    def __add__(self, other):
+        o_b = self.__class__()
+        o_b.price = self.price + other.price
+        return o_b
+    __radd__ = __add__
+
+    def __mul__(self, other):
+        try:
+            pct = float(other)
+            o_b = self.__class__()
+            o_b.price = self.price * pct
+            return o_b
+        except ValueError:
+            raise TypeError('Invalid mul value')
+    __rmul__ = __mul__
+# option 1 with oid 1
+
+
+class opt_1(OptionBase):
     @property
     def oid(self):
         return 1
+# option 2 with oid 2
 
 
-class opt_2:
-    def __init__(self):
-        self.price = None
-
+class opt_2(OptionBase):
     @property
     def oid(self):
         return 2
@@ -555,6 +572,7 @@ o1 = opt_1()
 print(o1.price)
 # compute
 pricing(o1)
+# result : 1
 print(o1.price)  # auto call PA to price o1
 
 
@@ -562,6 +580,9 @@ o2 = opt_2()
 print(o2.price)
 # compute price
 pricing(o2)
+# result : 2
 print(o2.price)  # auto call PB to price o2
 
-PA()(o2)
+# combination of o1 and o2
+o_combine = o1 + 0.5 * o2
+print(o_combine.price)
