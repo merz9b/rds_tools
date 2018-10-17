@@ -6,7 +6,7 @@
 
 __author__ = 'Xin Zhang'
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open('requirements.txt', 'r') as f:
     require_lists = f.read().split('\n')
@@ -18,14 +18,8 @@ setup(
     author_email='zhangxin_chn@126.com',
     description='Guosen rds tools library.',
     keywords='rds tool',
-    packages=['rds_tools',
-              'rds_tools.db_executor',
-              'rds_tools.models',
-              'rds_tools.utils',
-              'rds_tools.db_executor.delete',
-              'rds_tools.db_executor.insert',
-              'rds_tools.db_executor.select',
-              'rds_tools.db_executor.update'],
+    packages=find_packages(),
+    include_package_data=True,
     dependency_links=[],
     install_requires=require_lists
 )

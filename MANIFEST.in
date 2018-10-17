@@ -1,3 +1,2 @@
 include readme.MD requirements.txt
-recursive-include *.py
-recursive-include rds_tools *.bak
+recursive-include rds_tools/db_configs *.bak
