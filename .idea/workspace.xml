@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="227f418d-0e62-4c8a-bcf7-1ca63057b7e2" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/rds_tools/db_configs/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MANIFEST.in" beforeDir="false" afterPath="$PROJECT_DIR$/MANIFEST.in" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rds_tools/db_configs/connection_info.json.bak" beforeDir="false" afterPath="$PROJECT_DIR$/connection_info.json.bak" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -51,7 +49,7 @@
         <counts>
           <entry key="MANIFEST" value="1" />
           <entry key="MD" value="4" />
-          <entry key="gitignore" value="2" />
+          <entry key="gitignore" value="3" />
           <entry key="in" value="6" />
           <entry key="json" value="1" />
           <entry key="py" value="47" />
@@ -62,7 +60,7 @@
         <counts>
           <entry key="JSON" value="1" />
           <entry key="Markdown" value="4" />
-          <entry key="PLAIN_TEXT" value="11" />
+          <entry key="PLAIN_TEXT" value="12" />
           <entry key="Python" value="47" />
         </counts>
       </usages-collector>
@@ -209,6 +207,12 @@
               <item name="rds_tools" type="462c0819:PsiDirectoryNode" />
               <item name="rds_tools" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="rds_tools" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rds_tools" type="462c0819:PsiDirectoryNode" />
+              <item name="rds_tools" type="462c0819:PsiDirectoryNode" />
+              <item name="db_configs" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -224,11 +228,12 @@
     <option name="myShowVariablesByDefault" value="false" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\gxjy-004\Projects\py_projects\rds_tools\rds_tools\db_executor" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\gxjy-004\Projects\py_projects\rds_tools\rds_tools\db_configs" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\gxjy-004\Projects\py_projects\rds_tools" />
+      <recent name="C:\Users\gxjy-004\Projects\py_projects\rds_tools\rds_tools\db_executor" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -304,7 +309,6 @@
     <entry file="file://$USER_HOME$/anaconda/lib/python3.5/site-packages/pymysql/cursors.py" />
     <entry file="file://$USER_HOME$/anaconda/lib/python3.5/site-packages/sqlalchemy/engine/base.py" />
     <entry file="file://$USER_HOME$/anaconda/lib/python3.5/site-packages/sqlalchemy/sql/compiler.py" />
-    <entry file="file://$PROJECT_DIR$/rds_tools/db_configs/.gitignore" />
     <entry file="file://$PROJECT_DIR$/rds_tools/select/.gitignore" />
     <entry file="file://$PROJECT_DIR$/rds_tools/db_executor/update/.gitignore" />
     <entry file="file://$PROJECT_DIR$/connection_info.json.bak">
@@ -480,6 +484,9 @@
           <caret line="1" column="45" selection-start-line="1" selection-start-column="45" selection-end-line="1" selection-end-column="45" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rds_tools/db_configs/.gitignore">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
