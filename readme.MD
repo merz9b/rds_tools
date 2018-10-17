@@ -6,7 +6,7 @@
 - modify the config file `connection_info.json.bak` and fill the info.
 - install the package by executing:
 ```commandline
-pip setup.py install
+python setup.py install
 ```
 
 # Reference Documents

@@ -27,7 +27,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="MD" value="239" />
+          <entry key="MD" value="318" />
           <entry key="Python Console" value="540" />
           <entry key="gitignore" value="1" />
           <entry key="in" value="72" />
@@ -39,7 +39,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JSON" value="1" />
-          <entry key="Markdown" value="215" />
+          <entry key="Markdown" value="294" />
           <entry key="PLAIN_TEXT" value="74" />
           <entry key="Python" value="7702" />
         </counts>
@@ -47,19 +47,19 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="MANIFEST" value="1" />
-          <entry key="MD" value="5" />
+          <entry key="MD" value="7" />
           <entry key="gitignore" value="3" />
           <entry key="in" value="6" />
           <entry key="json" value="2" />
           <entry key="py" value="47" />
-          <entry key="txt" value="2" />
+          <entry key="txt" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="JSON" value="2" />
-          <entry key="Markdown" value="5" />
-          <entry key="PLAIN_TEXT" value="12" />
+          <entry key="Markdown" value="7" />
+          <entry key="PLAIN_TEXT" value="13" />
           <entry key="Python" value="47" />
         </counts>
       </usages-collector>
@@ -70,38 +70,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test_script.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3741">
-              <caret line="129" lean-forward="true" selection-start-line="129" selection-end-line="129" />
-              <folding>
-                <element signature="e#123#175#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/setup.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="726">
-              <caret line="29" column="34" lean-forward="true" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
-              <folding>
-                <element signature="e#130#141#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/readme.MD">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="174">
-                <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
-              </first_editor>
-              <second_editor />
+            <state relative-caret-position="348">
+              <caret line="12" column="17" lean-forward="true" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -290,7 +263,7 @@
       <window_info anchor="right" id="Commander" order="1" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
-      <window_info anchor="right" id="Python Console" order="4" weight="0.4339019" />
+      <window_info anchor="right" id="Python Console" order="4" visible="true" weight="0.4339019" />
     </layout>
   </component>
   <component name="UnknownFeatures">
@@ -443,13 +416,6 @@
     <entry file="file://$PROJECT_DIR$/rds_tools/models/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/requirements.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="3" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rds_tools/db_executor/update/update_scripts.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2929">
@@ -467,16 +433,6 @@
     <entry file="file://$PROJECT_DIR$/rds_tools/db_configs/.gitignore">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_script.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3741">
-          <caret line="129" lean-forward="true" selection-start-line="129" selection-end-line="129" />
-          <folding>
-            <element signature="e#123#175#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rds_tools/db_configs/connection_info.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="377">
@@ -486,19 +442,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="726">
-          <caret line="29" column="34" lean-forward="true" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
+        <state relative-caret-position="262">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
           <folding>
             <element signature="e#130#141#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="3" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/readme.MD">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="174">
-            <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+          <first_editor relative-caret-position="232">
+            <caret line="8" column="6" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
           </first_editor>
           <second_editor />
         </state>
@@ -506,6 +469,13 @@
       <provider editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_script.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="348">
+          <caret line="12" column="17" lean-forward="true" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
         </state>
       </provider>
     </entry>
