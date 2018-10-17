@@ -6,10 +6,16 @@
 
 __author__ = 'Xin Zhang'
 
+import json
 from setuptools import setup, find_packages
 
 with open('requirements.txt', 'r') as f:
     require_lists = f.read().split('\n')
+
+with open('connection_info.json.bak', 'r') as f:
+    cfg = json.loads(f.read())
+    with open('./rds_tools/db_configs/connection_info.json', 'w+') as f1:
+        f1.write(json.dumps(cfg))
 
 setup(
     name='rds_tools',

@@ -1,2 +1,2 @@
-include readme.MD requirements.txt
-recursive-include rds_tools/db_configs *.bak
+include readme.MD requirements.txt connection_info.json.bak
+recursive-include rds_tools/db_configs *.json
