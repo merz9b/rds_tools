@@ -3,7 +3,11 @@
 
 ## Setup
 
-- modify the config file `connection_info.json.bak` to `connection_info.json` and fill the info
+- modify the config file `connection_info.json.bak` and fill the info.
+- install the package by executing:
+```commandline
+pip setup.py install
+```
 
 # Reference Documents
 

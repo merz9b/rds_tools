@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="227f418d-0e62-4c8a-bcf7-1ca63057b7e2" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/rds_tools/db_configs/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.MD" beforeDir="false" afterPath="$PROJECT_DIR$/readme.MD" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,38 +27,38 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="MD" value="207" />
+          <entry key="MD" value="239" />
           <entry key="Python Console" value="540" />
           <entry key="gitignore" value="1" />
           <entry key="in" value="72" />
           <entry key="json" value="1" />
-          <entry key="py" value="7137" />
+          <entry key="py" value="7138" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JSON" value="1" />
-          <entry key="Markdown" value="183" />
+          <entry key="Markdown" value="215" />
           <entry key="PLAIN_TEXT" value="74" />
-          <entry key="Python" value="7701" />
+          <entry key="Python" value="7702" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="MANIFEST" value="1" />
-          <entry key="MD" value="4" />
+          <entry key="MD" value="5" />
           <entry key="gitignore" value="3" />
           <entry key="in" value="6" />
-          <entry key="json" value="1" />
+          <entry key="json" value="2" />
           <entry key="py" value="47" />
           <entry key="txt" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JSON" value="1" />
-          <entry key="Markdown" value="4" />
+          <entry key="JSON" value="2" />
+          <entry key="Markdown" value="5" />
           <entry key="PLAIN_TEXT" value="12" />
           <entry key="Python" value="47" />
         </counts>
@@ -74,20 +73,35 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_script.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="7" selection-start-line="7" selection-end-line="7" />
+            <state relative-caret-position="3741">
+              <caret line="129" lean-forward="true" selection-start-line="129" selection-end-line="129" />
+              <folding>
+                <element signature="e#123#175#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/setup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="726">
+              <caret line="29" column="34" lean-forward="true" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
+              <folding>
+                <element signature="e#130#141#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/setup.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
-              <caret line="17" column="33" lean-forward="true" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
-              <folding>
-                <element signature="e#130#141#0" expanded="true" />
-              </folding>
+        <entry file="file://$PROJECT_DIR$/readme.MD">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="174">
+                <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -143,12 +157,12 @@
         <option value="$PROJECT_DIR$/rds_tools/db_executor/__init__.py" />
         <option value="$PROJECT_DIR$/rds_tools/db_executor/delete/delete_scripts.py" />
         <option value="$PROJECT_DIR$/rds_tools/db_executor/update/update_scripts.py" />
-        <option value="$PROJECT_DIR$/readme.MD" />
         <option value="$PROJECT_DIR$/rds_tools/utils/__init__.py" />
         <option value="$PROJECT_DIR$/rds_tools/models/__init__.py" />
-        <option value="$PROJECT_DIR$/test_script.py" />
         <option value="$PROJECT_DIR$/MANIFEST.in" />
         <option value="$PROJECT_DIR$/setup.py" />
+        <option value="$PROJECT_DIR$/test_script.py" />
+        <option value="$PROJECT_DIR$/readme.MD" />
       </list>
     </option>
   </component>
@@ -206,12 +220,6 @@
               <item name="rds_tools" type="b2602c69:ProjectViewProjectNode" />
               <item name="rds_tools" type="462c0819:PsiDirectoryNode" />
               <item name="rds_tools" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rds_tools" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rds_tools" type="462c0819:PsiDirectoryNode" />
-              <item name="rds_tools" type="462c0819:PsiDirectoryNode" />
-              <item name="db_configs" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -282,7 +290,7 @@
       <window_info anchor="right" id="Commander" order="1" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
-      <window_info anchor="right" id="Python Console" order="4" visible="true" weight="0.4339019" />
+      <window_info anchor="right" id="Python Console" order="4" weight="0.4339019" />
     </layout>
   </component>
   <component name="UnknownFeatures">
@@ -323,13 +331,6 @@
     <entry file="file://$USER_HOME$/anaconda/lib/python3.5/site-packages/pandas/core/algorithms.py" />
     <entry file="file://$USER_HOME$/anaconda/lib/python3.5/site-packages/pandas/core/frame.py" />
     <entry file="file://$USER_HOME$/anaconda/lib/python3.5/site-packages/pandas/core/generic.py" />
-    <entry file="file://$PROJECT_DIR$/rds_tools/db_configs/connection_info.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="13" column="1" lean-forward="true" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rds_tools/utils/exec_sqls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="174">
@@ -435,21 +436,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/readme.MD">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="1117">
-            <caret line="184" lean-forward="true" selection-start-line="184" selection-end-line="184" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MANIFEST" />
     <entry file="file://$PROJECT_DIR$/rds_tools/utils/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
@@ -471,13 +457,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_script.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MANIFEST.in">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="29">
@@ -488,13 +467,45 @@
     <entry file="file://$PROJECT_DIR$/rds_tools/db_configs/.gitignore">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/test_script.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3741">
+          <caret line="129" lean-forward="true" selection-start-line="129" selection-end-line="129" />
+          <folding>
+            <element signature="e#123#175#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rds_tools/db_configs/connection_info.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="13" column="1" lean-forward="true" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="17" column="33" lean-forward="true" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
+        <state relative-caret-position="726">
+          <caret line="29" column="34" lean-forward="true" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
           <folding>
             <element signature="e#130#141#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/readme.MD">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="174">
+            <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
     </entry>
