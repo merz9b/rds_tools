@@ -69,7 +69,7 @@ class DbSelect:
         res_tmp = select(
             [distinct(model_params.c.modelinstance)]
         ).where(
-            model_params.c.accountid == account_id).execute().fetchall()
+            model_params.c.accountid == account_id).where(model_params.c.model == 'wing').execute().fetchall()
 
         return list(
             set(map(lambda x: '-'.join(x[0].split('-')[:-1]), res_tmp)))

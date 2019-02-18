@@ -51,11 +51,13 @@ class MysqlConfig(JsonConfig):
     def production_engine(self, user='gxqh'):
         conn_str = '''mysql+pymysql://{usr}:{pwd}@{ip}:{port}/{db}?charset=utf8'''
         info = self.production_info()
-        if user == 'localuser':
-            tgt_ip = info[user]['ip']
+        tgt_ip = info[user]['ip']
+        try:
             current_ip = get_public_ip()
-            if current_ip == tgt_ip:
-                info[user]['ip'] = 'localhost'
+        except:
+            current_ip = tgt_ip
+        if current_ip == tgt_ip:
+            info[user]['ip'] = 'localhost'
         return create_engine(conn_str.format(**info[user]))
 
 

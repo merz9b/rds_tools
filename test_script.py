@@ -15,11 +15,36 @@ from rds_tools.models.tables import (
 
 from rds_tools.db_executor import FuturexDB
 
+from rds_tools.models.tables import usermodels
+
 import pandas as pd
 
-from sqlalchemy.sql import select, and_, insert
+from sqlalchemy.sql import select, and_, insert, or_
 
-from rds_tools.models.tables import usermodels
+from rds_tools.models.tables import model_params
+
+order_rcds = FuturexDB.select.get_order_record_by_symbol_traderid(
+    'OTC-DCE-i', 12001)
+
+tmp = pd.read_sql(select([model_params.c.modelinstance,
+                                 model_params.c.paramname,
+                                 model_params.c.paramstring]).where(
+    model_params.c.modelinstance.in_(
+        order_rcds['modelinstance'].tolist()
+    )).where(or_(model_params.c.paramname == 'strike',
+                 model_params.c.paramname == 'exp_date',
+                 model_params.c.paramname == 'ref_contract')), model_params.bind)
+
+tmp = tmp.set_index(['modelinstance','paramname']).unstack().reset_index()
+
+tmp.columns = ['modelinstance', 'exp_date', 'ref_contract','strike']
+
+tmp['exp_date'] = pd.to_datetime(tmp['exp_date'])
+order_rcds = pd.merge(order_rcds, tmp, left_on=['modelinstance'], right_on=['modelinstance'], how='left')
+
+print(order_rcds[order_rcds['exp_date'] >= pd.datetime.now()])
+
+
 
 time.time()
 
@@ -291,3 +316,35 @@ pd.read_sql(
     ),
     order_record_otc.bind
 )
+
+
+
+s_sql = '''
+SELECT 
+JSON_MERGE_PATCH(JSON_OBJECT('modelinstance',modelinstance),CONVERT(param, JSON)) as json_param
+FROM 
+(SELECT modelinstance, CONCAT('{',GROUP_CONCAT( concat('"',paramname,'"'),':',paramvalue),'}') as param
+FROM 
+(select * from model_params ORDER BY paramname) t1  
+where accountid = 20 and model = 'wing' GROUP BY modelinstance) t2 
+ORDER BY modelinstance;
+'''
+import json
+df = pd.read_sql(s_sql, model_params.bind)
+
+df1 = df['json_param'].apply(lambda x:pd.Series(json.loads(x)))
+
+
+pd.Series(json.loads(df['json_param'][0]))
+
+
+# 在my.ini 追加
+# max_allowed_packet=20M
+# group_concat_max_len = 102400000
+
+hash(json.dumps({'a':1}))
+
+
+from functools import reduce
+
+reduce(lambda x,y:(x+y)/2, range(100))
